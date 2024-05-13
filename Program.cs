@@ -20,7 +20,7 @@ namespace Client2
                 using Socket client = new Socket(ipEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
                 await client.ConnectAsync(ipEndPoint);
-                Console.WriteLine("Connected to server.");
+                Console.WriteLine("Prisijungta prie serverio.");
 
                 while (true)
                 {
@@ -28,20 +28,20 @@ namespace Client2
                     int received = await client.ReceiveAsync(buffer, SocketFlags.None);
                     if (received == 0)
                     {
-                        Console.WriteLine("Server closed the connection.");
+                        Console.WriteLine("Serveris uzdare prisijungima.");
                         break;
                     }
                     string message = Encoding.UTF8.GetString(buffer, 0, received);
-                    Console.WriteLine("Received message from server: " + message);
+                    Console.WriteLine("Zinute is serverio: " + message);
 
                     string[] parts = message.Split(',');
                     if (ValidateSignature(parts))
                     {
-                        Console.WriteLine("Signature validated");
+                        Console.WriteLine("Parasas patvirtintas");
                     }
                     else
                     {
-                        Console.WriteLine("Signature not valid");
+                        Console.WriteLine("Parasas nepatvirtintas");
                     }
                 }
 

@@ -24,24 +24,29 @@ namespace Client2
 
                 while (true)
                 {
-                    byte[] buffer = new byte[2048];
+
+                    byte[] buffer = new byte[1024];
                     int received = await client.ReceiveAsync(buffer, SocketFlags.None);
-                    if (received == 0)
-                    {
-                        Console.WriteLine("Serveris uzdare prisijungima.");
-                        break;
-                    }
                     string message = Encoding.UTF8.GetString(buffer, 0, received);
-                    Console.WriteLine("Zinute is serverio: " + message);
+
 
                     string[] parts = message.Split(',');
+
+                    Console.WriteLine($"n: {parts[0]}");
+                    Console.WriteLine($"e: {parts[1]}");
+                    Console.WriteLine($"x: {parts[2]}");
+                    Console.WriteLine($"s: {parts[3]}");
+
                     if (ValidateSignature(parts))
                     {
                         Console.WriteLine("Parasas patvirtintas");
+                        break;
+
                     }
                     else
                     {
                         Console.WriteLine("Parasas nepatvirtintas");
+                        break;
                     }
                 }
 
@@ -58,8 +63,8 @@ namespace Client2
         {
             BigInteger n = BigInteger.Parse(parts[0]);
             BigInteger e = BigInteger.Parse(parts[1]);
-            string[] xParts = parts[3].Split(' ');
-            string[] sParts = parts[4].Split(' ');
+            string[] xParts = parts[2].Split(' ');
+            string[] sParts = parts[3].Split(' ');
 
             BigInteger[] xBigIntegers = new BigInteger[xParts.Length];
             BigInteger[] sBigIntegers = new BigInteger[sParts.Length];
@@ -103,7 +108,5 @@ namespace Client2
             }
             return true;
         }
-
-
     }
 }
